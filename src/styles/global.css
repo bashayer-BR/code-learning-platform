@@ -1,0 +1,105 @@
+@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap');
+@import './variables.css';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--gradient-bg);
+  color: var(--text-primary);
+  font-family: 'Cairo', sans-serif;
+  direction: rtl;
+  min-height: 100vh;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-surface); }
+::-webkit-scrollbar-thumb {
+  background: var(--primary-light);
+  border-radius: 3px;
+}
+
+a { text-decoration: none; color: inherit; }
+button { cursor: pointer; border: none; outline: none; font-family: inherit; }
+
+.card {
+  background: var(--bg-card);
+  border-radius: var(--radius-l);
+  border: 1px solid var(--divider);
+  box-shadow: var(--shadow-card);
+  transition: var(--transition);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-2px);
+}
+
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.btn-primary {
+  background: var(--gradient-primary);
+  color: white;
+  padding: 10px 24px;
+  border-radius: var(--radius-xl);
+  font-weight: 700;
+  font-size: var(--font-s);
+  font-family: 'Cairo', sans-serif;
+  box-shadow: var(--shadow-primary);
+  transition: var(--transition);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-hover);
+}
+
+.btn-secondary {
+  background: var(--bg-surface);
+  color: var(--text-primary);
+  padding: 10px 24px;
+  border-radius: var(--radius-xl);
+  font-weight: 600;
+  font-size: var(--font-s);
+  font-family: 'Cairo', sans-serif;
+  border: 1px solid var(--divider);
+  transition: var(--transition);
+}
+
+.btn-secondary:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: var(--radius-xl);
+  font-size: var(--font-xs);
+  font-weight: 700;
+}
+
+.badge-primary {
+  background: rgba(232, 130, 74, 0.12);
+  color: var(--primary);
+}
+
+.badge-green {
+  background: rgba(46, 204, 154, 0.12);
+  color: var(--green);
+}
+
+.badge-blue {
+  background: rgba(74, 144, 217, 0.12);
+  color: var(--blue);
+}

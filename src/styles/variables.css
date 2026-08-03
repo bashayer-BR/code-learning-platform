@@ -1,0 +1,74 @@
+:root {
+  /* ── Background ───────────────── */
+  --bg-dark:    #FDF6EE;
+  --bg-card:    #FFFFFF;
+  --bg-surface: #FFF1E6;
+
+  /* ── Primary ──────────────────── */
+  --primary:       #E8824A;
+  --primary-dark:  #C96A35;
+  --primary-light: #F4A978;
+
+  /* ── Secondary ────────────────── */
+  --secondary:       #2ECC9A;
+  --secondary-dark:  #25A87F;
+  --secondary-light: #7EECD1;
+
+  /* ── Accent ───────────────────── */
+  --accent-blue:   #4A90D9;
+  --accent-purple: #9B6FD4;
+  --accent-yellow: #F5C842;
+
+  /* ── Text ─────────────────────── */
+  --text-primary:   #1A1A2E;
+  --text-secondary: #5A5A7A;
+  --text-hint:      #9A9AB0;
+  --text-accent:    #E8824A;
+
+  /* ── Borders ──────────────────── */
+  --divider: #EDE0D4;
+  --border:  #DDD0C4;
+
+  /* ── Gradients ────────────────── */
+  --gradient-primary:   linear-gradient(135deg, #E8824A, #F4A978);
+  --gradient-secondary: linear-gradient(135deg, #2ECC9A, #4A90D9);
+  --gradient-bg:        linear-gradient(160deg, #FDF6EE 0%, #FFF1E6 50%, #F0FAF5 100%);
+  --gradient-card:      linear-gradient(135deg, #FFFFFF, #FFF8F2);
+
+  /* ── Colors ───────────────────── */
+  --green:  #2ECC9A;
+  --blue:   #4A90D9;
+  --purple: #9B6FD4;
+  --orange: #E8824A;
+  --red:    #E85A4A;
+  --yellow: #F5C842;
+
+  /* ── Spacing ──────────────────── */
+  --space-xs: 6px;
+  --space-s:  12px;
+  --space-m:  18px;
+  --space-l:  28px;
+  --space-xl: 40px;
+
+  /* ── Border radius ────────────── */
+  --radius-s:  8px;
+  --radius-m:  12px;
+  --radius-l:  20px;
+  --radius-xl: 30px;
+
+  /* ── Font sizes ───────────────── */
+  --font-xs:  12px;
+  --font-s:   14px;
+  --font-m:   16px;
+  --font-l:   20px;
+  --font-xl:  26px;
+  --font-xxl: 32px;
+
+  /* ── Shadows ──────────────────── */
+  --shadow-primary: 0 4px 20px rgba(232, 130, 74, 0.25);
+  --shadow-card:    0 2px 8px rgba(0,0,0,0.06), 0 4px 20px rgba(0,0,0,0.04);
+  --shadow-hover:   0 8px 30px rgba(232, 130, 74, 0.18);
+
+  /* ── Transitions ──────────────── */
+  --transition: all 0.2s ease;
+}
