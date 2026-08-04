@@ -17,100 +17,102 @@ function Navbar() {
   ];
 
   return (
-    <nav style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: '0 32px',
-      height: '64px',
+    <nav className="navbar navbar-expand-lg sticky-top" style={{
       backgroundColor: 'var(--bg-card)',
       borderBottom: '1px solid var(--divider)',
       boxShadow: 'var(--shadow-card)',
-      position: 'sticky',
-      top: 0,
-      zIndex: 100,
+      padding: '0 32px',
+      height: '64px',
     }}>
       {/* Logo */}
-      <span style={{
+      <Link className="navbar-brand fw-black" to="/" style={{
         background: 'var(--gradient-primary)',
         WebkitBackgroundClip: 'text',
         WebkitTextFillColor: 'transparent',
-        fontWeight: '900',
         fontSize: 'var(--font-l)',
       }}>
         {'</> برمج'}
-      </span>
+      </Link>
+
+      {/* Hamburger */}
+      <button
+        className="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navMenu"
+        style={{ border: '1px solid var(--divider)' }}
+      >
+        <span className="navbar-toggler-icon" />
+      </button>
 
       {/* Links */}
-      <div style={{ display: 'flex', gap: '4px' }}>
-        {navItems.map((item) => {
-          const isActive = location.pathname === item.path;
-          return (
-            <Link
-              key={item.path}
-              to={item.path}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                padding: '6px 12px',
-                borderRadius: 'var(--radius-m)',
-                fontSize: 'var(--font-s)',
-                fontWeight: isActive ? '700' : '500',
-                color: isActive ? 'var(--primary)' : 'var(--text-secondary)',
-                backgroundColor: isActive ? 'rgba(232, 130, 74, 0.10)' : 'transparent',
-                border: isActive ? '1px solid rgba(232, 130, 74, 0.2)' : '1px solid transparent',
-                transition: 'var(--transition)',
-              }}
-            >
-              <span>{item.icon}</span>
-              <span>{t(item.key)}</span>
-            </Link>
-          );
-        })}
-      </div>
+      <div className="collapse navbar-collapse" id="navMenu">
+        <ul className="navbar-nav mx-auto gap-1">
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.path;
+            return (
+              <li className="nav-item" key={item.path}>
+                <Link
+                  to={item.path}
+                  className="nav-link d-flex align-items-center gap-1"
+                  style={{
+                    fontSize: 'var(--font-s)',
+                    fontWeight: isActive ? '700' : '500',
+                    color: isActive ? 'var(--primary)' : 'var(--text-secondary)',
+                    backgroundColor: isActive ? 'rgba(232, 130, 74, 0.10)' : 'transparent',
+                    border: isActive ? '1px solid rgba(232, 130, 74, 0.2)' : '1px solid transparent',
+                    borderRadius: 'var(--radius-m)',
+                    padding: '6px 12px',
+                    transition: 'var(--transition)',
+                  }}
+                >
+                  <span>{item.icon}</span>
+                  <span>{t(item.key)}</span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
 
-      {/* Right side */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-s)' }}>
+        {/* Right side */}
+        <div className="d-flex align-items-center gap-2">
+          <button
+            onClick={toggleLang}
+            style={{
+              padding: '6px 14px',
+              borderRadius: 'var(--radius-xl)',
+              background: 'var(--bg-surface)',
+              border: '1px solid var(--divider)',
+              color: 'var(--text-secondary)',
+              fontSize: 'var(--font-s)',
+              fontWeight: '600',
+              fontFamily: 'Cairo, sans-serif',
+              cursor: 'pointer',
+              transition: 'var(--transition)',
+            }}
+          >
+            {lang === 'ar' ? 'EN' : 'عربي'}
+          </button>
 
-        {/* Language toggle */}
-        <button
-          onClick={toggleLang}
-          style={{
-            padding: '6px 14px',
-            borderRadius: 'var(--radius-xl)',
-            background: 'var(--bg-surface)',
-            border: '1px solid var(--divider)',
-            color: 'var(--text-secondary)',
+          <button className="btn-primary" style={{ padding: '8px 20px' }}>
+            {t('nav_try')}
+          </button>
+
+          {/* <div style={{
+            width: '36px',
+            height: '36px',
+            borderRadius: '50%',
+            background: 'var(--gradient-primary)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: 'white',
+            fontWeight: '700',
             fontSize: 'var(--font-s)',
-            fontWeight: '600',
-            fontFamily: 'Cairo, sans-serif',
             cursor: 'pointer',
-            transition: 'var(--transition)',
-          }}
-        >
-          {lang === 'ar' ? 'EN' : 'AR'}
-        </button>
-
-        <button className="btn-primary" style={{ padding: '8px 20px' }}>
-          {t('nav_try')}
-        </button>
-
-        {/* Avatar */}
-        <div style={{
-          width: '36px',
-          height: '36px',
-          borderRadius: '50%',
-          background: 'var(--gradient-primary)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          color: 'white',
-          fontWeight: '700',
-          fontSize: 'var(--font-s)',
-          cursor: 'pointer',
-        }}>
-          م
+          }}>
+            م
+          </div> */}
         </div>
       </div>
     </nav>
