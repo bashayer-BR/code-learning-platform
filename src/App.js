@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
+import Lessons from './pages/Lessons';
 
 function App() {
   return (
@@ -8,7 +9,7 @@ function App() {
     <Navbar/>
       <Routes>
         <Route path="/" element={<Home/>} />
-        <Route path="/lessons" element={<h1>الدروس</h1>} />
+        <Route path="/lessons" element={<Lessons/>} />
         <Route path="/editor" element={<h1>المحرر</h1>} />
         <Route path="/challenges" element={<h1>التحديات</h1>} />
         <Route path="/ai" element={<h1>AI مساعد</h1>} />
