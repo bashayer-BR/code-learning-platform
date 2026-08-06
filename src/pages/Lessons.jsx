@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useLang } from '../context/LanguageContext';
+import { useNavigate } from 'react-router-dom';
 
 const lessonsData = {
   ar: [
@@ -42,6 +43,7 @@ const categoryColors = {
 };
 
 function Lessons() {
+  const navigate = useNavigate();
   const { lang } = useLang();
   const [activeCategory, setActiveCategory] = useState('all');
   const [activeLevel,    setActiveLevel]    = useState('all');
@@ -179,6 +181,7 @@ function Lessons() {
                 {/* Button */}
                 <button
                   className="btn-primary mt-auto w-100"
+                  onClick={() => navigate(`/lessons/${lesson.id}`)}
                   style={{ background: `linear-gradient(135deg, ${cc.color}, ${cc.color}BB)`, padding: '10px' }}
                 >
                   {lang === 'ar' ? 'ابدأ الدرس ←' : 'Start Lesson →'}

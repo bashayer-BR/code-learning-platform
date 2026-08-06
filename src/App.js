@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Lessons from './pages/Lessons';
+import LessonDetail from './pages/LessonDetail';
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home/>} />
         <Route path="/lessons" element={<Lessons/>} />
+        <Route path="/lessons/:id" element={<LessonDetail />} />
         <Route path="/editor" element={<h1>المحرر</h1>} />
         <Route path="/challenges" element={<h1>التحديات</h1>} />
         <Route path="/ai" element={<h1>AI مساعد</h1>} />
