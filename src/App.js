@@ -3,6 +3,7 @@ import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Lessons from './pages/Lessons';
 import LessonDetail from './pages/LessonDetail';
+import Challenges from './pages/Challenges';
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
         <Route path="/lessons" element={<Lessons/>} />
         <Route path="/lessons/:id" element={<LessonDetail />} />
         <Route path="/editor" element={<h1>المحرر</h1>} />
-        <Route path="/challenges" element={<h1>التحديات</h1>} />
+        <Route path="/challenges" element={<Challenges/>} />
         <Route path="/ai" element={<h1>AI مساعد</h1>} />
         <Route path="/projects" element={<h1>مشاريعي</h1>} />
         <Route path="/roadmap" element={<h1>Roadmap</h1>} />
