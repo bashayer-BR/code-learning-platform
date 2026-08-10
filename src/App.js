@@ -6,6 +6,7 @@ import LessonDetail from './pages/LessonDetail';
 import Challenges from './pages/Challenges';
 import AI from './pages/AI';
 import Projects from './pages/Projects';
+import Roadmap from './pages/Roadmap';
 
 function App() {
   return (
@@ -19,7 +20,7 @@ function App() {
         <Route path="/challenges" element={<Challenges/>} />
         <Route path="/ai" element={<AI/>} />
         <Route path="/projects" element={<Projects/>} />
-        <Route path="/roadmap" element={<h1>Roadmap</h1>} />
+        <Route path="/roadmap" element={<Roadmap/>} />
         <Route path="/community" element={<h1>المجتمع</h1>} />
       </Routes>
     </BrowserRouter>
