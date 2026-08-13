@@ -8,6 +8,7 @@ import AI from './pages/AI';
 import Projects from './pages/Projects';
 import Roadmap from './pages/Roadmap';
 import Community from './pages/Community';
+import NotFound from './pages/NotFound';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/projects" element={<Projects/>} />
         <Route path="/roadmap" element={<Roadmap/>} />
         <Route path="/community" element={<Community/>} />
+        <Route path="*" element={<NotFound/>} />
       </Routes>
     </BrowserRouter>
   );
