@@ -9,6 +9,7 @@ import Projects from './pages/Projects';
 import Roadmap from './pages/Roadmap';
 import Community from './pages/Community';
 import NotFound from './pages/NotFound';
+import Auth from './pages/Auth';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
     <Navbar/>
       <Routes>
         <Route path="/" element={<Home/>} />
+        <Route path="/auth" element={<Auth/>} />
         <Route path="/lessons" element={<Lessons/>} />
         <Route path="/lessons/:id" element={<LessonDetail />} />
         <Route path="/editor" element={<h1>المحرر</h1>} />
