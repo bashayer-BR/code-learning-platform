@@ -7,11 +7,14 @@ import { LanguageProvider } from './context/LanguageContext';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
+import { AuthProvider } from './context/AuthContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <LanguageProvider>
-    <App />
-  </LanguageProvider>
+  <AuthProvider>
+    <LanguageProvider>
+      <App />
+    </LanguageProvider>
+  </AuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
