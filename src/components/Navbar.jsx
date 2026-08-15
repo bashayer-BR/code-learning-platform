@@ -1,9 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
 import { useLang } from '../context/LanguageContext';
+import { useNavigate } from 'react-router-dom';
 
 function Navbar() {
   const location = useLocation();
   const { t, lang, toggleLang } = useLang();
+  const navigate = useNavigate();
 
   const navItems = [
     { path: '/',           key: 'nav_home',       icon: '🏠' },
@@ -94,7 +96,11 @@ function Navbar() {
             {lang === 'ar' ? 'EN' : 'عربي'}
           </button>
 
-          <button className="btn-primary" style={{ padding: '8px 20px' }}>
+          <button
+            className="btn-primary"
+            onClick={() => navigate('/auth')}
+            style={{ padding: '8px 20px' }}
+          >
             {t('nav_try')}
           </button>
 
