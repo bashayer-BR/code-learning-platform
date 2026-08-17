@@ -1,11 +1,12 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useLang } from '../context/LanguageContext';
-import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 function Navbar() {
-  const location = useLocation();
+  const location          = useLocation();
+  const navigate          = useNavigate();
   const { t, lang, toggleLang } = useLang();
-  const navigate = useNavigate();
+  const { user, logout }  = useAuth();
 
   const navItems = [
     { path: '/',           key: 'nav_home',       icon: '🏠' },
@@ -18,6 +19,11 @@ function Navbar() {
     { path: '/community',  key: 'nav_community',  icon: '👥' },
   ];
 
+  const handleLogout = async () => {
+    await logout();
+    navigate('/');
+  };
+
   return (
     <nav className="navbar navbar-expand-lg sticky-top" style={{
       backgroundColor: 'var(--bg-card)',
@@ -26,6 +32,7 @@ function Navbar() {
       padding: '0 32px',
       height: '64px',
     }}>
+
       {/* Logo */}
       <Link className="navbar-brand fw-black" to="/" style={{
         background: 'var(--gradient-primary)',
@@ -78,6 +85,8 @@ function Navbar() {
 
         {/* Right side */}
         <div className="d-flex align-items-center gap-2">
+
+          {/* Language toggle */}
           <button
             onClick={toggleLang}
             style={{
@@ -96,29 +105,62 @@ function Navbar() {
             {lang === 'ar' ? 'EN' : 'عربي'}
           </button>
 
-          <button
-            className="btn-primary"
-            onClick={() => navigate('/auth')}
-            style={{ padding: '8px 20px' }}
-          >
-            {t('nav_try')}
-          </button>
+          {user ? (
+            // ── مسجّل دخول ──────────────────
+            <div className="d-flex align-items-center gap-2">
+              {/* Avatar + اسم */}
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                padding: '6px 12px',
+                borderRadius: 'var(--radius-xl)',
+                background: 'var(--bg-surface)',
+                border: '1px solid var(--divider)',
+              }}>
+                <div style={{
+                  width: '28px', height: '28px',
+                  borderRadius: '50%',
+                  background: 'var(--gradient-primary)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  color: 'white', fontWeight: '700', fontSize: '12px',
+                }}>
+                  {user.displayName?.[0] || user.email?.[0] || '؟'}
+                </div>
+                <span style={{ fontSize: 'var(--font-s)', fontWeight: '600', color: 'var(--text-primary)' }}>
+                  {user.displayName || user.email?.split('@')[0]}
+                </span>
+              </div>
 
-          {/* <div style={{
-            width: '36px',
-            height: '36px',
-            borderRadius: '50%',
-            background: 'var(--gradient-primary)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'white',
-            fontWeight: '700',
-            fontSize: 'var(--font-s)',
-            cursor: 'pointer',
-          }}>
-            م
-          </div> */}
+              {/* Logout */}
+              <button
+                onClick={handleLogout}
+                style={{
+                  padding: '6px 14px',
+                  borderRadius: 'var(--radius-xl)',
+                  background: 'rgba(239, 68, 68, 0.08)',
+                  border: '1px solid rgba(239, 68, 68, 0.2)',
+                  color: 'var(--red)',
+                  fontSize: 'var(--font-s)',
+                  fontWeight: '600',
+                  fontFamily: 'Cairo, sans-serif',
+                  cursor: 'pointer',
+                  transition: 'var(--transition)',
+                }}
+              >
+                {lang === 'ar' ? 'خروج' : 'Logout'}
+              </button>
+            </div>
+          ) : (
+            // ── غير مسجّل ───────────────────
+            <button
+              className="btn-primary"
+              onClick={() => navigate('/auth')}
+              style={{ padding: '8px 20px' }}
+            >
+              {t('nav_try')}
+            </button>
+          )}
         </div>
       </div>
     </nav>

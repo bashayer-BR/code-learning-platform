@@ -1,27 +1,56 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLang } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
 
 function Auth() {
-  const { lang }   = useLang();
-  const navigate   = useNavigate();
-  const [mode, setMode]         = useState('login'); // login | register
-  const [email, setEmail]       = useState('');
-  const [password, setPassword] = useState('');
-  const [name, setName]         = useState('');
-  const [loading, setLoading]   = useState(false);
-  const [error, setError]       = useState('');
+  const { lang }    = useLang();
+  const navigate    = useNavigate();
+  const { loginWithGoogle, loginWithEmail, registerWithEmail } = useAuth();
 
+  const [mode,     setMode]     = useState('login');
+  const [email,    setEmail]    = useState('');
+  const [password, setPassword] = useState('');
+  const [name,     setName]     = useState('');
+  const [loading,  setLoading]  = useState(false);
+  const [error,    setError]    = useState('');
+
+  // ── تسجيل دخول بـ Google ──────────────
+  const handleGoogle = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      await loginWithGoogle();
+      navigate('/');
+    } catch (e) {
+      setError(lang === 'ar' ? 'فشل تسجيل الدخول بـ Google' : 'Google sign in failed');
+    }
+    setLoading(false);
+  };
+
+  // ── تسجيل دخول / إنشاء حساب بالإيميل ──
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
-
-    // هنا نربط Firebase لاحقاً
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      if (mode === 'login') {
+        await loginWithEmail(email, password);
+      } else {
+        await registerWithEmail(email, password, name);
+      }
       navigate('/');
-    }, 1000);
+    } catch (e) {
+      const errors = {
+        'auth/user-not-found':    lang === 'ar' ? 'البريد غير موجود'        : 'Email not found',
+        'auth/wrong-password':    lang === 'ar' ? 'كلمة المرور خاطئة'       : 'Wrong password',
+        'auth/email-already-in-use': lang === 'ar' ? 'البريد مستخدم بالفعل' : 'Email already in use',
+        'auth/weak-password':     lang === 'ar' ? 'كلمة المرور ضعيفة جداً' : 'Password too weak',
+        'auth/invalid-email':     lang === 'ar' ? 'البريد غير صحيح'         : 'Invalid email',
+      };
+      setError(errors[e.code] || (lang === 'ar' ? 'حدث خطأ، حاول مرة أخرى' : 'An error occurred, try again'));
+    }
+    setLoading(false);
   };
 
   const inputStyle = {
@@ -56,18 +85,16 @@ function Auth() {
   };
 
   return (
-    <div
-      style={{
-        minHeight: 'calc(100vh - 64px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '40px 20px',
-      }}
-    >
+    <div style={{
+      minHeight: 'calc(100vh - 64px)',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      padding: '40px 20px',
+    }}>
       <div style={{ width: '100%', maxWidth: '440px' }}>
 
-        {/* ── Logo ─────────────────────────── */}
+        {/* Logo */}
         <div className="text-center mb-4">
           <div style={{ fontSize: '48px', marginBottom: '8px' }}>
             {mode === 'login' ? '👋' : '🚀'}
@@ -84,28 +111,19 @@ function Auth() {
           </p>
         </div>
 
-        {/* ── Card ─────────────────────────── */}
         <div className="card p-4">
 
           {/* Mode tabs */}
-          <div
-            className="d-flex mb-4"
-            style={{
-              background: 'var(--bg-surface)',
-              borderRadius: 'var(--radius-m)',
-              padding: '4px',
-            }}
-          >
+          <div className="d-flex mb-4" style={{ background: 'var(--bg-surface)', borderRadius: 'var(--radius-m)', padding: '4px' }}>
             {[
-              { key: 'login',    label_ar: 'تسجيل الدخول', label_en: 'Sign In'  },
-              { key: 'register', label_ar: 'حساب جديد',    label_en: 'Sign Up'  },
+              { key: 'login',    label_ar: 'تسجيل الدخول', label_en: 'Sign In' },
+              { key: 'register', label_ar: 'حساب جديد',    label_en: 'Sign Up' },
             ].map((tab) => (
               <button
                 key={tab.key}
                 onClick={() => { setMode(tab.key); setError(''); }}
                 style={{
-                  flex: 1,
-                  padding: '8px',
+                  flex: 1, padding: '8px',
                   borderRadius: 'var(--radius-s)',
                   border: 'none',
                   background: mode === tab.key ? 'var(--bg-card)' : 'transparent',
@@ -125,13 +143,9 @@ function Auth() {
 
           {/* Social login */}
           <div className="d-flex flex-column gap-2 mb-4">
-            <button style={socialBtnStyle}>
+            <button onClick={handleGoogle} disabled={loading} style={socialBtnStyle}>
               <span>🔵</span>
               {lang === 'ar' ? 'متابعة بـ Google' : 'Continue with Google'}
-            </button>
-            <button style={socialBtnStyle}>
-              <span>⚫</span>
-              {lang === 'ar' ? 'متابعة بـ GitHub' : 'Continue with GitHub'}
             </button>
           </div>
 
@@ -148,7 +162,6 @@ function Auth() {
           <form onSubmit={handleSubmit}>
             <div className="d-flex flex-column gap-3">
 
-              {/* Name (register only) */}
               {mode === 'register' && (
                 <div>
                   <label style={{ fontSize: 'var(--font-s)', fontWeight: '600', marginBottom: '6px', display: 'block' }}>
@@ -165,7 +178,6 @@ function Auth() {
                 </div>
               )}
 
-              {/* Email */}
               <div>
                 <label style={{ fontSize: 'var(--font-s)', fontWeight: '600', marginBottom: '6px', display: 'block' }}>
                   {lang === 'ar' ? 'البريد الإلكتروني' : 'Email'}
@@ -174,13 +186,12 @@ function Auth() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder={lang === 'ar' ? 'example@email.com' : 'example@email.com'}
+                  placeholder="example@email.com"
                   required
                   style={inputStyle}
                 />
               </div>
 
-              {/* Password */}
               <div>
                 <label style={{ fontSize: 'var(--font-s)', fontWeight: '600', marginBottom: '6px', display: 'block' }}>
                   {lang === 'ar' ? 'كلمة المرور' : 'Password'}
@@ -195,7 +206,6 @@ function Auth() {
                 />
               </div>
 
-              {/* Forgot password */}
               {mode === 'login' && (
                 <div className="text-end">
                   <button
@@ -203,8 +213,7 @@ function Auth() {
                     style={{
                       background: 'none', border: 'none',
                       color: 'var(--primary)', fontSize: 'var(--font-xs)',
-                      fontFamily: 'Cairo, sans-serif', cursor: 'pointer',
-                      fontWeight: '600',
+                      fontFamily: 'Cairo, sans-serif', cursor: 'pointer', fontWeight: '600',
                     }}
                   >
                     {lang === 'ar' ? 'نسيت كلمة المرور؟' : 'Forgot password?'}
@@ -212,21 +221,18 @@ function Auth() {
                 </div>
               )}
 
-              {/* Error */}
               {error && (
                 <div style={{
                   padding: '10px 14px',
                   borderRadius: 'var(--radius-m)',
                   background: 'rgba(239, 68, 68, 0.08)',
                   border: '1px solid rgba(239, 68, 68, 0.2)',
-                  color: 'var(--red)',
-                  fontSize: 'var(--font-s)',
+                  color: 'var(--red)', fontSize: 'var(--font-s)',
                 }}>
                   ❌ {error}
                 </div>
               )}
 
-              {/* Submit */}
               <button
                 type="submit"
                 className="btn-primary w-100"
@@ -243,7 +249,6 @@ function Auth() {
             </div>
           </form>
 
-          {/* Toggle mode */}
           <div className="text-center mt-3">
             <span style={{ color: 'var(--text-hint)', fontSize: 'var(--font-s)' }}>
               {mode === 'login'
@@ -255,8 +260,7 @@ function Auth() {
               style={{
                 background: 'none', border: 'none',
                 color: 'var(--primary)', fontSize: 'var(--font-s)',
-                fontFamily: 'Cairo, sans-serif', cursor: 'pointer',
-                fontWeight: '700',
+                fontFamily: 'Cairo, sans-serif', cursor: 'pointer', fontWeight: '700',
               }}
             >
               {mode === 'login'
@@ -264,10 +268,8 @@ function Auth() {
                 : (lang === 'ar' ? 'سجّل دخولك' : 'Sign In')}
             </button>
           </div>
-
         </div>
 
-        {/* Terms */}
         <p className="text-center mt-3" style={{ color: 'var(--text-hint)', fontSize: 'var(--font-xs)' }}>
           {lang === 'ar'
             ? 'بالتسجيل توافق على شروط الاستخدام وسياسة الخصوصية'
