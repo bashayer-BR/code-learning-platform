@@ -8,12 +8,15 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import { AuthProvider } from './context/AuthContext';
+import {UserProvider}  from './context/UserContext';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <AuthProvider>
-    <LanguageProvider>
-      <App />
-    </LanguageProvider>
+    <UserProvider>
+      <LanguageProvider>
+        <App />
+      </LanguageProvider>
+    </UserProvider>
   </AuthProvider>
 );
 
