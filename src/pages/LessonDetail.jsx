@@ -1,6 +1,9 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState , useEffect  } from 'react';
 import { useLang } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
+import { useUser } from '../context/UserContext';
+import { completeLesson } from '../services/userService';
 
 const lessonsDetails = {
   1: {
@@ -133,6 +136,27 @@ function LessonDetail() {
   const { id }       = useParams();
   const navigate     = useNavigate();
   const { lang }     = useLang();
+  // 
+  const { user }              = useAuth();
+  const { profile, refreshProfile } = useUser();
+  const [done, setDone]       = useState(false);
+
+  // تحقق لو الدرس مكتمل بالفعل
+  useEffect(() => {
+    if (profile?.completedLessons?.includes(Number(id))) {
+      setDone(true);
+    }
+  }, [profile, id]);
+
+  const handleComplete = async () => {
+    if (!user) {
+      navigate('/auth');
+      return;
+    }
+    await completeLesson(user.uid, Number(id));
+    await refreshProfile();
+    setDone(true);
+  };
   const [activeTab, setActiveTab] = useState('overview');
 
   const detail = lessonsDetails[id]?.[lang] || defaultDetail(id, lang);
@@ -338,10 +362,18 @@ function LessonDetail() {
             </p>
 
             <button
-              className="btn-primary w-100 mb-3"
-              style={{ padding: '14px', fontSize: 'var(--font-m)' }}
+              className="btn-primary w-100"
+              onClick={handleComplete}
+              disabled={done}
+              style={{
+                padding: '14px',
+                fontSize: 'var(--font-m)',
+                background: done ? 'var(--green)' : undefined,
+              }}
             >
-              {lang === 'ar' ? '🚀 ابدأ التعلم مجاناً' : '🚀 Start Learning Free'}
+              {done
+                ? (lang === 'ar' ? '✅ تم الإتمام' : '✅ Completed')
+                : (lang === 'ar' ? '🚀 ابدأ التعلم مجاناً' : '🚀 Start Learning Free')}
             </button>
 
             <button
