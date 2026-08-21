@@ -1,12 +1,14 @@
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useLang } from '../context/LanguageContext';
 import { useAuth } from '../context/AuthContext';
+import { useUser } from '../context/UserContext';
 
 function Navbar() {
-  const location          = useLocation();
-  const navigate          = useNavigate();
+  const location                = useLocation();
+  const navigate                = useNavigate();
   const { t, lang, toggleLang } = useLang();
-  const { user, logout }  = useAuth();
+  const { user, logout }        = useAuth();
+  const { profile }             = useUser();
 
   const navItems = [
     { path: '/',           key: 'nav_home',       icon: '🏠' },
@@ -106,9 +108,8 @@ function Navbar() {
           </button>
 
           {user ? (
-            // ── مسجّل دخول ──────────────────
             <div className="d-flex align-items-center gap-2">
-              {/* Avatar + اسم */}
+              {/* Avatar + اسم + نقاط */}
               <div style={{
                 display: 'flex',
                 alignItems: 'center',
@@ -130,6 +131,18 @@ function Navbar() {
                 <span style={{ fontSize: 'var(--font-s)', fontWeight: '600', color: 'var(--text-primary)' }}>
                   {user.displayName || user.email?.split('@')[0]}
                 </span>
+                {profile && (
+                  <span style={{
+                    background: 'rgba(232, 130, 74, 0.12)',
+                    color: 'var(--primary)',
+                    fontSize: 'var(--font-xs)',
+                    fontWeight: '700',
+                    padding: '2px 8px',
+                    borderRadius: 'var(--radius-xl)',
+                  }}>
+                    ⭐ {profile.points}
+                  </span>
+                )}
               </div>
 
               {/* Logout */}
@@ -152,7 +165,6 @@ function Navbar() {
               </button>
             </div>
           ) : (
-            // ── غير مسجّل ───────────────────
             <button
               className="btn-primary"
               onClick={() => navigate('/auth')}
