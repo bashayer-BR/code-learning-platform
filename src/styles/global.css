@@ -47,7 +47,7 @@ button { cursor: pointer; border: none; outline: none; font-family: inherit; }
 
 .btn-primary {
   background: var(--gradient-primary);
-  color: white;
+  color: white !important;
   padding: 10px 24px;
   border-radius: var(--radius-xl);
   font-weight: 700;

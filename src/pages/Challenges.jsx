@@ -1,6 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLang } from '../context/LanguageContext';
+import { useAuth } from '../context/AuthContext';
+import { useUser } from '../context/UserContext';
+import { completeChallenge } from '../services/userService';
 
 const challengesData = {
   ar: [
@@ -22,14 +25,17 @@ const challengesData = {
 };
 
 const levelConfig = {
-  easy:   { color: 'var(--green)',  bg: 'rgba(46, 204, 154, 0.10)',  label_ar: 'سهل',    label_en: 'Easy'   },
-  medium: { color: 'var(--orange)', bg: 'rgba(232, 130, 74, 0.10)', label_ar: 'متوسط',  label_en: 'Medium' },
-  hard:   { color: 'var(--blue)',   bg: 'rgba(74, 144, 217, 0.10)', label_ar: 'صعب',    label_en: 'Hard'   },
+  easy:   { color: 'var(--green)',  bg: 'rgba(46, 204, 154, 0.10)',  label_ar: 'سهل',   label_en: 'Easy'   },
+  medium: { color: 'var(--orange)', bg: 'rgba(232, 130, 74, 0.10)', label_ar: 'متوسط', label_en: 'Medium' },
+  hard:   { color: 'var(--blue)',   bg: 'rgba(74, 144, 217, 0.10)', label_ar: 'صعب',   label_en: 'Hard'   },
 };
 
 function Challenges() {
-  const { lang }   = useLang();
-  const navigate   = useNavigate();
+  const { lang }                    = useLang();
+  const navigate                    = useNavigate();
+  const { user }                    = useAuth();
+  const { profile, refreshProfile } = useUser();
+
   const [activeLevel,    setActiveLevel]    = useState('all');
   const [activeCategory, setActiveCategory] = useState('all');
 
@@ -43,9 +49,9 @@ function Challenges() {
   ];
 
   const categories = [
-    { key: 'all',        label_ar: 'الكل',       label_en: 'All',        icon: '📚' },
-    { key: 'javascript', label_ar: 'JavaScript',  label_en: 'JavaScript', icon: '⚡' },
-    { key: 'python',     label_ar: 'Python',      label_en: 'Python',     icon: '🐍' },
+    { key: 'all',        label_ar: 'الكل',      label_en: 'All',        icon: '📚' },
+    { key: 'javascript', label_ar: 'JavaScript', label_en: 'JavaScript', icon: '⚡' },
+    { key: 'python',     label_ar: 'Python',     label_en: 'Python',     icon: '🐍' },
   ];
 
   const filtered = challenges.filter((c) => {
@@ -53,6 +59,15 @@ function Challenges() {
     const categoryMatch = activeCategory === 'all' || c.category === activeCategory;
     return levelMatch && categoryMatch;
   });
+
+  const isSolved = (id) => profile?.completedChallenges?.includes(id);
+
+  const handleSolve = async (challenge) => {
+    if (!user) { navigate('/auth'); return; }
+    await completeChallenge(user.uid, challenge.id);
+    await refreshProfile();
+    navigate('/editor');
+  };
 
   return (
     <div className="container py-5">
@@ -67,13 +82,13 @@ function Challenges() {
         </p>
       </div>
 
-      {/* ── Stats row ────────────────────── */}
+      {/* ── Stats ────────────────────────── */}
       <div className="row g-3 mb-5">
         {[
-          { icon: '✅', value: '3',    label: lang === 'ar' ? 'تحديات حُلّت'   : 'Solved'    },
-          { icon: '🔥', value: '5',    label: lang === 'ar' ? 'أيام متتالية'   : 'Day Streak' },
-          { icon: '⭐', value: '320',  label: lang === 'ar' ? 'نقطة مكتسبة'   : 'Points'    },
-          { icon: '🏅', value: '#42',  label: lang === 'ar' ? 'ترتيبك العالمي' : 'Global Rank' },
+          { icon: '✅', value: profile?.completedChallenges?.length || 0, label: lang === 'ar' ? 'تحديات حُلّت'   : 'Solved'      },
+          { icon: '🔥', value: profile?.streak || 0,                      label: lang === 'ar' ? 'أيام متتالية'   : 'Day Streak'  },
+          { icon: '⭐', value: profile?.points  || 0,                     label: lang === 'ar' ? 'نقطة مكتسبة'   : 'Points'      },
+          { icon: '🏅', value: '#--',                                      label: lang === 'ar' ? 'ترتيبك العالمي' : 'Global Rank' },
         ].map((stat) => (
           <div className="col-6 col-md-3" key={stat.label}>
             <div className="card p-3 text-center">
@@ -89,7 +104,7 @@ function Challenges() {
         ))}
       </div>
 
-      {/* ── Filters ──────────────────────── */}
+      {/* ── Category filter ──────────────── */}
       <div className="d-flex flex-wrap gap-2 mb-3">
         {categories.map((cat) => (
           <button
@@ -113,9 +128,10 @@ function Challenges() {
         ))}
       </div>
 
+      {/* ── Level filter ─────────────────── */}
       <div className="d-flex flex-wrap gap-2 mb-5">
         {levels.map((lvl) => {
-          const lc = levelConfig[lvl.key];
+          const lc       = levelConfig[lvl.key];
           const isActive = activeLevel === lvl.key;
           return (
             <button
@@ -143,13 +159,13 @@ function Challenges() {
       {/* ── Challenges grid ──────────────── */}
       <div className="row g-4">
         {filtered.map((challenge) => {
-          const lc = levelConfig[challenge.level];
+          const lc      = levelConfig[challenge.level];
+          const solved  = isSolved(challenge.id);
           return (
             <div className="col-lg-4 col-md-6" key={challenge.id}>
               <div
                 className="card h-100 p-4"
-                style={{ cursor: 'pointer', border: `1px solid ${lc.color}25` }}
-                onClick={() => navigate(`/editor`)}
+                style={{ border: `1px solid ${lc.color}25` }}
               >
                 {/* Icon + Level */}
                 <div className="d-flex justify-content-between align-items-start mb-3">
@@ -180,9 +196,17 @@ function Challenges() {
                 {/* Button */}
                 <button
                   className="btn-primary mt-auto w-100"
-                  style={{ background: `linear-gradient(135deg, ${lc.color}, ${lc.color}BB)`, padding: '10px' }}
+                  onClick={() => handleSolve(challenge)}
+                  style={{
+                    // background: solved
+                    //   ? 'linear-gradient(135deg, #2ECC9A, #0D7A37)'
+                    //   : `linear-gradient(135deg, ${lc.color}, ${lc.color}BB)`,
+                    padding: '10px',
+                  }}
                 >
-                  {lang === 'ar' ? 'حل التحدي ←' : 'Solve Challenge →'}
+                  {solved
+                    ? (lang === 'ar' ? '✅ تم الحل' : '✅ Solved')
+                    : (lang === 'ar' ? 'حل التحدي ←' : 'Solve Challenge →')}
                 </button>
               </div>
             </div>
