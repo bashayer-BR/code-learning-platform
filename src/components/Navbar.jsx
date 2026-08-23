@@ -108,7 +108,9 @@ function Navbar() {
           </button>
 
           {user ? (
-            <div className="d-flex align-items-center gap-2">
+            <div 
+            onClick={() => navigate('/profile')}
+            className="d-flex align-items-center gap-2">
               {/* Avatar + اسم + نقاط */}
               <div style={{
                 display: 'flex',
