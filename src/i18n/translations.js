@@ -10,6 +10,7 @@ const translations = {
     nav_roadmap:    'Roadmap',
     nav_community:  'المجتمع',
     nav_try:        'جرّب مجاناً',
+    nav_dashboard: 'لوحتي',
 
     // Home Hero
     hero_badge:    '🚀 منصة تعلم البرمجة #1',
@@ -55,6 +56,7 @@ const translations = {
     nav_roadmap:    'Roadmap',
     nav_community:  'Community',
     nav_try:        'Try Free',
+    nav_dashboard: 'Dashboard',
 
     // Home Hero
     hero_badge:    '🚀 #1 Programming Learning Platform',

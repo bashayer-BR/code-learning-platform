@@ -11,6 +11,7 @@ import Community from './pages/Community';
 import NotFound from './pages/NotFound';
 import Auth from './pages/Auth';
 import Profile from './pages/Profile';
+import Dashboard from './pages/Dashboard';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Route path="/roadmap" element={<Roadmap/>} />
         <Route path="/community" element={<Community/>} />
         <Route path="/profile" element={<Profile/>} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="*" element={<NotFound/>} />
       </Routes>
     </BrowserRouter>
