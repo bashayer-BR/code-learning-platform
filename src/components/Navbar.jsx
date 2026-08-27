@@ -21,6 +21,7 @@ function Navbar() {
     { path: '/community',  key: 'nav_community',  icon: '👥' },
     { path: '/dashboard', key: 'nav_dashboard', icon: '📊' },
     { path: '/certificates', key: 'nav_certificates', icon: '📜' },
+    { path: '/chats', key: 'nav_chats', icon: '💬' },
   ];
 
   const handleLogout = async () => {

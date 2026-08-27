@@ -13,6 +13,7 @@ import Auth from './pages/Auth';
 import Profile from './pages/Profile';
 import Dashboard from './pages/Dashboard';
 import Certificates from './pages/Certificates';
+import Chats from './pages/Chats';
 
 function App() {
   return (
@@ -32,6 +33,7 @@ function App() {
         <Route path="/profile" element={<Profile/>} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/certificates" element={<Certificates />} />
+        <Route path="/chats" element={<Chats />} />
         <Route path="*" element={<NotFound/>} />
       </Routes>
     </BrowserRouter>
