@@ -13,6 +13,7 @@ const translations = {
     nav_dashboard: 'لوحتي',
     nav_certificates: 'شهاداتي',
     nav_chats: 'محادثاتي',
+    nav_settings: 'الإعدادات',
 
     // Home Hero
     hero_badge:    '🚀 منصة تعلم البرمجة #1',
@@ -61,6 +62,7 @@ const translations = {
     nav_dashboard: 'Dashboard',
     nav_certificates: 'Certificates',
     nav_chats: 'My Chats',
+    nav_settings: 'Settings',
 
     // Home Hero
     hero_badge:    '🚀 #1 Programming Learning Platform',
