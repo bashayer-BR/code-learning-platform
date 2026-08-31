@@ -7,17 +7,17 @@ function AI() {
     {
       role: 'assistant',
       content: lang === 'ar'
-        ? 'مرحباً! أنا مساعدك البرمجي. كيف يمكنني مساعدتك اليوم؟ يمكنني شرح الكود، تصحيح الأخطاء، أو الإجابة على أسئلتك البرمجية.'
-        : 'Hello! I\'m your coding assistant. How can I help you today? I can explain code, fix bugs, or answer your programming questions.',
+        ? 'مرحباً! أنا مساعدك البرمجي. كيف يمكنني مساعدتك اليوم؟'
+        : "Hello! I'm your coding assistant. How can I help you today?",
     },
   ]);
-  const [input, setInput]       = useState('');
-  const [loading, setLoading]   = useState(false);
-  const messagesEndRef           = useRef(null);
+  const [input,   setInput]   = useState('');
+  const [loading, setLoading] = useState(false);
+  const messagesEndRef         = useRef(null);
 
   const quickQuestions = lang === 'ar'
     ? ['ما الفرق بين let و const؟', 'اشرح لي Flexbox', 'ما هو الـ API؟', 'كيف أتعلم React؟']
-    : ['What is the difference between let and const?', 'Explain Flexbox', 'What is an API?', 'How to learn React?'];
+    : ['Difference between let and const?', 'Explain Flexbox', 'What is an API?', 'How to learn React?'];
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -32,20 +32,21 @@ function AI() {
     setLoading(true);
 
     try {
-      const response = await fetch('https://api.anthropic.com/v1/messages', {
+      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
         headers: {
+          'Authorization': `Bearer ${process.env.REACT_APP_GROQ_API_KEY}`,
           'Content-Type': 'application/json',
-          'x-api-key': 'YOUR_API_KEY_HERE',
-          'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
-          max_tokens: 1000,
-          system: lang === 'ar'
-            ? 'أنت مساعد برمجي خبير. أجب باللغة العربية بشكل واضح ومختصر. استخدم أمثلة كود عند الحاجة.'
-            : 'You are an expert coding assistant. Answer clearly and concisely. Use code examples when needed.',
+          model: 'openai/gpt-oss-120b',
           messages: [
+            {
+              role: 'system',
+              content: lang === 'ar'
+                ? 'أنت مساعد برمجي خبير. أجب باللغة العربية بشكل واضح ومختصر. استخدم أمثلة كود عند الحاجة.'
+                : 'You are an expert coding assistant. Answer clearly and concisely. Use code examples when needed.',
+            },
             ...messages.map((m) => ({ role: m.role, content: m.content })),
             { role: 'user', content: userMsg },
           ],
@@ -53,9 +54,12 @@ function AI() {
       });
 
       const data = await response.json();
-      const reply = data.content?.[0]?.text || (lang === 'ar' ? 'لا يوجد رد' : 'No response');
+      console.log('Groq response:', data);
+      const reply = data.choices?.[0]?.message?.content
+        || (lang === 'ar' ? 'لا يوجد رد' : 'No response');
       setMessages((prev) => [...prev, { role: 'assistant', content: reply }]);
-    } catch {
+    } catch (e) {
+      console.error('Groq error:', e);
       setMessages((prev) => [...prev, {
         role: 'assistant',
         content: lang === 'ar' ? '❌ خطأ في الاتصال' : '❌ Connection error',
@@ -76,7 +80,7 @@ function AI() {
         <p style={{ color: 'var(--text-secondary)', fontSize: 'var(--font-m)' }}>
           {lang === 'ar'
             ? 'اسأل عن أي موضوع برمجي وسأساعدك فوراً'
-            : 'Ask about any programming topic and I\'ll help you instantly'}
+            : "Ask about any programming topic and I'll help you instantly"}
         </p>
       </div>
 
@@ -88,12 +92,8 @@ function AI() {
 
             {/* Messages */}
             <div style={{
-              flex: 1,
-              overflowY: 'auto',
-              padding: '20px',
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '16px',
+              flex: 1, overflowY: 'auto', padding: '20px',
+              display: 'flex', flexDirection: 'column', gap: '16px',
             }}>
               {messages.map((msg, i) => (
                 <div
@@ -102,8 +102,7 @@ function AI() {
                 >
                   {msg.role === 'assistant' && (
                     <div style={{
-                      width: '36px', height: '36px',
-                      borderRadius: '50%',
+                      width: '36px', height: '36px', borderRadius: '50%',
                       background: 'var(--gradient-primary)',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       flexShrink: 0,
@@ -114,19 +113,12 @@ function AI() {
                     </div>
                   )}
                   <div style={{
-                    maxWidth: '75%',
-                    padding: '12px 16px',
-                    borderRadius: msg.role === 'user'
-                      ? '18px 18px 4px 18px'
-                      : '18px 18px 18px 4px',
-                    background: msg.role === 'user'
-                      ? 'var(--gradient-primary)'
-                      : 'var(--bg-surface)',
+                    maxWidth: '75%', padding: '12px 16px',
+                    borderRadius: msg.role === 'user' ? '18px 18px 4px 18px' : '18px 18px 18px 4px',
+                    background: msg.role === 'user' ? 'var(--gradient-primary)' : 'var(--bg-surface)',
                     color: msg.role === 'user' ? 'white' : 'var(--text-primary)',
-                    fontSize: 'var(--font-s)',
-                    lineHeight: '1.7',
-                    whiteSpace: 'pre-wrap',
-                    wordBreak: 'break-word',
+                    fontSize: 'var(--font-s)', lineHeight: '1.7',
+                    whiteSpace: 'pre-wrap', wordBreak: 'break-word',
                   }}>
                     {msg.content}
                   </div>
@@ -136,8 +128,7 @@ function AI() {
               {loading && (
                 <div className="d-flex justify-content-start align-items-center gap-2">
                   <div style={{
-                    width: '36px', height: '36px',
-                    borderRadius: '50%',
+                    width: '36px', height: '36px', borderRadius: '50%',
                     background: 'var(--gradient-primary)',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
@@ -166,15 +157,13 @@ function AI() {
                   onKeyDown={(e) => e.key === 'Enter' && !e.shiftKey && sendMessage()}
                   placeholder={lang === 'ar' ? 'اكتب سؤالك هنا...' : 'Type your question here...'}
                   style={{
-                    flex: 1,
-                    padding: '12px 16px',
+                    flex: 1, padding: '12px 16px',
                     borderRadius: 'var(--radius-xl)',
                     border: '1px solid var(--divider)',
                     background: 'var(--bg-surface)',
                     color: 'var(--text-primary)',
                     fontSize: 'var(--font-s)',
-                    fontFamily: 'Cairo, sans-serif',
-                    outline: 'none',
+                    fontFamily: 'Cairo, sans-serif', outline: 'none',
                   }}
                 />
                 <button
