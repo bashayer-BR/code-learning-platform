@@ -72,3 +72,18 @@
   /* ── Transitions ──────────────── */
   --transition: all 0.2s ease;
 }
+/* ── Dark Mode ────────────────────── */
+[data-theme='dark'] {
+  --bg-dark:    #0A0F1E;
+  --bg-card:    #111827;
+  --bg-surface: #1A2235;
+
+  --text-primary:   #FFFFFF;
+  --text-secondary: #B0BEC5;
+  --text-hint:      #607D8B;
+
+  --divider: #1E2D3D;
+  --border:  #1E3347;
+
+  --gradient-bg: linear-gradient(135deg, #060C18, #0D1A2E, #0A1628);
+}

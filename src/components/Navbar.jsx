@@ -6,9 +6,10 @@ import { useUser } from '../context/UserContext';
 function Navbar() {
   const location                = useLocation();
   const navigate                = useNavigate();
-  const { t, lang, toggleLang } = useLang();
+  const { t, lang, toggleLang,theme, toggleTheme  } = useLang();
   const { user, logout }        = useAuth();
   const { profile }             = useUser();
+
 
   const navItems = [
     { path: '/',           key: 'nav_home',       icon: '🏠' },
@@ -110,6 +111,22 @@ function Navbar() {
           >
             {lang === 'ar' ? 'EN' : 'عربي'}
           </button>
+          {/* // الزر */}
+            <button
+              onClick={toggleTheme}
+              style={{
+                padding: '6px 14px',
+                borderRadius: 'var(--radius-xl)',
+                background: 'var(--bg-surface)',
+                border: '1px solid var(--divider)',
+                color: 'var(--text-secondary)',
+                fontSize: '16px',
+                cursor: 'pointer',
+                transition: 'var(--transition)',
+              }}
+            >
+              {theme === 'light' ? '🌙' : '☀️'}
+            </button>
 
           {user ? (
             <div 

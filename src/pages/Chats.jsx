@@ -87,7 +87,7 @@ function Chats() {
           'anthropic-version': '2023-06-01',
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-4-6',
+          model: 'openai/gpt-oss-120b',
           max_tokens: 1000,
           system: lang === 'ar'
             ? 'أنت مساعد برمجي خبير. أجب بالعربية بشكل واضح ومختصر.'
