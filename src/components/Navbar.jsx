@@ -20,6 +20,7 @@ function Navbar() {
     { path: '/projects',   key: 'nav_projects',   icon: '🚀' },
     { path: '/roadmap',    key: 'nav_roadmap',    icon: '🗺️' },
     { path: '/community',  key: 'nav_community',  icon: '👥' },
+    { path: '/leaderboard', key: 'nav_leaderboard', icon: '🏆' },
   ];
 
   const handleLogout = async () => {

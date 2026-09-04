@@ -13,6 +13,7 @@ import Auth from './pages/Auth';
 import Profile from './pages/Profile';
 import Dashboard from './pages/Dashboard';
 import Certificates from './pages/Certificates';
+import Leaderboard from './pages/Leaderboard';
 
 
 function App() {
@@ -33,7 +34,7 @@ function App() {
         <Route path="/profile" element={<Profile/>} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/certificates" element={<Certificates />} />
-        
+        <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="*" element={<NotFound/>} />
       </Routes>
     </BrowserRouter>
