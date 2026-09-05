@@ -14,6 +14,7 @@ import Profile from './pages/Profile';
 import Dashboard from './pages/Dashboard';
 import Certificates from './pages/Certificates';
 import Leaderboard from './pages/Leaderboard';
+import Editor from './pages/Editor';
 
 
 function App() {
@@ -25,7 +26,7 @@ function App() {
         <Route path="/auth" element={<Auth/>} />
         <Route path="/lessons" element={<Lessons/>} />
         <Route path="/lessons/:id" element={<LessonDetail />} />
-        <Route path="/editor" element={<h1>المحرر</h1>} />
+        <Route path="/editor" element={<Editor/>} />
         <Route path="/challenges" element={<Challenges/>} />
         <Route path="/ai" element={<AI/>} />
         <Route path="/projects" element={<Projects/>} />
