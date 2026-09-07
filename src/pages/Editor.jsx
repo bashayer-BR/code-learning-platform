@@ -155,7 +155,7 @@ function Editor() {
               language={language}
               value={code}
               onChange={(val) => setCode(val || '')}
-              theme="vs-light"
+              theme="vs-dark"
               options={{
                 fontSize: 14,
                 minimap: { enabled: false },
